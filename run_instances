@@ -1,0 +1,16 @@
+## Using Client
+import boto3
+
+session= boto3.Session(profile_name = 'default')
+
+ec2client = session.client('ec2')
+
+client_instance = ec2client.run_instances(
+    ImageId='ami-038b3df3312ddf25d',
+    KeyName='mm_2022',
+    MinCount=1,
+    MaxCount=1,
+    InstanceType='t2.micro')
+    
+response = ec2client.describe_instances()
+print(response)
