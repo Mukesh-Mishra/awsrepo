@@ -1,0 +1,15 @@
+import pandas
+import boto3
+session=boto3.Session(profile_name='default')
+ec2client=session.client('ec2')
+rseponse = ec2client.describe_instances()
+
+datalist = []
+for eachitem in response:
+    for instance in eachitem['Instances']:
+        for tags in instance['Tags']:
+            datalist.append([instances['InstanceId'],instances['InstanceType'],instances['PrivateIpAddress'],eachitem['OwnerId'],tags['Value']])
+            
+df = pd.DataFrame(datalist, columns=(['InstanceId','InstanceType','PrivateIpAddress','OwnerId','Value']))
+
+df.to_csv('inventory.csv', index=False)
