@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 import boto3
 session=boto3.Session(profile_name='default')
 ec2client=session.client('ec2')
