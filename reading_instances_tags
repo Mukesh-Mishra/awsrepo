@@ -1,13 +1,17 @@
 import boto3
-def get_tag(tags, key='Name'):
-    if not tags: return ''
-    for tag in tags:
-        if tag['Key'] == key:
-            return tag['Value']
-    return ''
+ec2 = boto3.resource('ec2')
+vpc = ec2.Vpc('vpc-042248228e59d1af1')
+instances = vpc.instances.all()
 
-conn = boto3.resource('ec2')
-instances = conn.instances.filter()
 for instance in instances:
-    instance_name = get_tag(instance.tags)        
-    print (instance_name, instance.id, instance.instance_type, instance.tags)
+    if instance.tags is None:
+        instancename = 'Not Defined'
+        print (instance_name, instance.id, instance.instance_type, instancename)
+    else:
+        for tags in instance.tags:
+            if tags["Key"] == 'Name':
+                instancename = tags["Value"]
+                print (instance_name, instance.id, instance.instance_type, instancename)
+            else:
+                othertags = tags["Value"]
+                print (instance_name, instance.id, instance.instance_type, othertags)
