@@ -1,0 +1,13 @@
+import boto3
+import pandas as pd
+
+s3_resource = boto3.resource('s3')
+
+bucket = s3_resource.Bucket('vlinkucket1')
+
+mydata = []
+for object in bucket.objects.all():
+    mydata.append([object.bucket_name, object.key, object.storage_class])
+
+df = pd.DataFrame(mydata, columns = ['Bucket Name', 'File', 'Storage Class'])
+df.to_csv('s3_inventory.csv', index=False)
