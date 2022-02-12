@@ -1,0 +1,33 @@
+import boto3
+from botocore.exceptions import ClientError
+
+s3_client = boto3.client('s3')
+buckets_dict = s3_client.list_buckets()
+
+#---------Getting Buckets Name------------------------------------
+def list_all_buckts_name():
+    buckets_list = []
+    for bkts in buckets_dict['Buckets']:
+        buckets_list.append(bkts['Name'])
+    
+    return buckets_list
+
+
+#--------Getting Buckets Tags--------------------------------------
+all_buckets = list_all_buckts_name()
+i=0
+tag_status={}  
+ 
+while i<len(all_buckets):
+    bucket_name = all_buckets[i]
+    
+    try:
+        response = s3_client.get_bucket_tagging(Bucket=bucket_name)
+        tags = response['TagSet']
+        tag_status[bucket_name]=tags
+    
+    except ClientError:
+        tag_status[bucket_name]={'No Key':'No Tag'}
+    i+=1
+    
+tag_status
