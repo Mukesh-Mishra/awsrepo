@@ -1,0 +1,7 @@
+import boto3
+ec2 = boto3.resource('ec2')
+vpc = ec2.Vpc('vpc-042248228e59d1af1')
+instance_iterator = vpc.instances.all()
+
+for instance in instance_iterator:
+    print(instance_name ,instance.id)
